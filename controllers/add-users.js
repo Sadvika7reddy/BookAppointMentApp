@@ -6,7 +6,8 @@ exports.postAddDetails=async (req,res,next)=>{
         }
         const name=req.body.name;
         const email=req.body.email;
-        const data=await Users.create({name:name,email:email})
+        const password=req.body.password;
+        const data=await Users.create({name:name,email:email,password:password})
         res.status(201).json({newUserDetails:data})
     }
     catch(err){
@@ -16,13 +17,13 @@ exports.postAddDetails=async (req,res,next)=>{
     }
 }
 
-exports.getAddDetails=async (req,res,next)=>{
-    const users=await Users.findAll();
-    res.status(200).json({allUsers:users})
-}
+// exports.getAddDetails=async (req,res,next)=>{
+//     const users=await Users.findAll();
+//     res.status(200).json({allUsers:users})
+// }
 
-exports.deleteAddDetails=async (req,res,next)=>{
-    const userId=req.params.productId;
-    await Users.destroy({where:{id:userId}})
-    res.sendStatus(200)
-}
+// exports.deleteAddDetails=async (req,res,next)=>{
+//     const userId=req.params.productId;
+//     await Users.destroy({where:{id:userId}})
+//     res.sendStatus(200)
+// }
