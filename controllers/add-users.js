@@ -1,4 +1,5 @@
 const Users=require('../models/users')
+const bcrypt=require('bcrypt')
 exports.postAddDetails=async (req,res,next)=>{
     try{
         if(!req.body.name){
@@ -7,8 +8,12 @@ exports.postAddDetails=async (req,res,next)=>{
         const name=req.body.name;
         const email=req.body.email;
         const password=req.body.password;
-        const data=await Users.create({name:name,email:email,password:password})
-        res.status(201).json({newUserDetails:data})
+        const salt=10;
+        bcrypt.hash(password,salt,async (err,hash)=>{
+            const data=await Users.create({name:name,email:email,password:hash})
+            res.status(201).json({newUserDetails:data})
+        })
+        
     }
     catch(err){
        res.status(500).json({
@@ -23,15 +28,21 @@ exports.getAddDetails=async (req,res,next)=>{
         const password=req.body.password;
        let user=await Users.findAll({where:{email}})
        if(user.length>0){
-        if(user[0].password==password){
-            res.status(201).json({sucess:true,message:'user successfully loggIn'})
-        }
-        else{
-            throw new Error({success:false,message:'password incorrect'})
-        }
+        bcrypt.compare(password,user[0].password,(err,result)=>{
+            if(err){
+                throw new Error('somthing went wrong')
+            }
+             if(result){
+                res.status(201).json({sucess:true,message:'user successfully loggIn'})
+             }
+             else{
+                return res.status(400).json({success:false,message:'password incorrect'})
+            }
+        })
+        
        }
        else{
-        throw new Error({success:false,message:'userId doesnt exit'})
+          return res.status(401).json({success:false,message:'userId doesnt exit'})
        }
     }
     catch(error){
