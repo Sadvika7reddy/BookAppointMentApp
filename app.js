@@ -1,7 +1,8 @@
 const bodyParser=require('body-parser');
 
 const express=require('express');
-
+const User=require('./models/users')
+const Expense=require('./models/expense')
 const sequelize=require('./util/database');
 
 const cors=require('cors')
@@ -16,7 +17,12 @@ app.use(bodyParser.json({ extended: false }));
 
 app.use(applyRoutes);
 app.use(expenseRoutes)
-sequelize.sync()
+
+User.hasMany(Expense)
+Expense.belongsTo(User)
+
+
+sequelize.sync({})
 .then((result)=>{
     app.listen(3000);
 })

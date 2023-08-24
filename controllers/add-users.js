@@ -1,5 +1,6 @@
 const Users=require('../models/users')
 const bcrypt=require('bcrypt')
+const jwt=require('jsonwebtoken')
 exports.postAddDetails=async (req,res,next)=>{
     try{
         if(!req.body.name){
@@ -22,6 +23,10 @@ exports.postAddDetails=async (req,res,next)=>{
     }
 }
 
+function generateAcessToken(id){
+    return jwt.sign({userId:id},'adsjh98998wiikjnxnkjkbsbihhdd8wwhssjns')
+}
+ 
 exports.getAddDetails=async (req,res,next)=>{
     try{
         const email=req.body.email;
@@ -33,7 +38,7 @@ exports.getAddDetails=async (req,res,next)=>{
                 throw new Error('somthing went wrong')
             }
              if(result){
-                res.status(201).json({sucess:true,message:'user successfully loggIn'})
+                res.status(201).json({sucess:true,message:'user successfully loggIn',token:generateAcessToken(user[0].id)})
              }
              else{
                 return res.status(400).json({success:false,message:'password incorrect'})
