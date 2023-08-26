@@ -5,9 +5,9 @@ const purchasepremium=async(req,res,next)=>{
    try{
         var rzp=new Razorpay({
             //key_id:process.env.RAZORPAY_KEY_ID,
-              key_id:'rzp_test_UlCs5bCPfMifM7',
+              key_id:'rzp_test_qUkDlVvWiCVS6D',
             //key_secret:process.env.RAZORPAY_KEY_SECRET
-            key_secret:'qjlzOGlm1ClcNvlw6jg9CoOV'
+            key_secret:'wtzcBGnwRZBnvtsPMKI4vf1E'
         })
         const amount=2400;
         rzp.orders.create({amount,currency:"INR"},(err,order)=>{
