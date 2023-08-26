@@ -11,6 +11,7 @@ const cors=require('cors')
 const applyRoutes=require('./routes/add-users')
 const expenseRoutes=require('./routes/add-expense');
 const purchaseRoutes=require('./routes/purchase')
+const premiumRoutes=require('./routes/premium')
 
 const app=express();
 
@@ -20,6 +21,7 @@ app.use(bodyParser.json({ extended: false }));
 app.use(applyRoutes);
 app.use(expenseRoutes)
 app.use(purchaseRoutes)
+app.use(premiumRoutes)
 
 User.hasMany(Expense)
 Expense.belongsTo(User)

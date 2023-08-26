@@ -23,8 +23,8 @@ exports.postAddDetails=async (req,res,next)=>{
     }
 }
 
-function generateAcessToken(id){
-    return jwt.sign({userId:id},'adsjh98998wiikjnxnkjkbsbihhdd8wwhssjns')
+function generateAcessToken(id,ispremiumuser){
+    return jwt.sign({userId:id,ispremiumuser:ispremiumuser},'adsjh98998wiikjnxnkjkbsbihhdd8wwhssjns')
 }
  
 exports.getAddDetails=async (req,res,next)=>{
@@ -38,7 +38,7 @@ exports.getAddDetails=async (req,res,next)=>{
                 throw new Error('somthing went wrong')
             }
              if(result){
-                res.status(201).json({sucess:true,message:'user successfully loggIn',token:generateAcessToken(user[0].id)})
+                res.status(201).json({sucess:true,message:'user successfully loggIn',token:generateAcessToken(user[0].id,user[0].ispremiumuser)})
              }
              else{
                 return res.status(400).json({success:false,message:'password incorrect'})
