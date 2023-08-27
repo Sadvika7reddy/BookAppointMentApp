@@ -1,24 +1,30 @@
 const Expense=require('../models/expense')
-const User=require('../models/users')
+const User=require('../models/users');
+const sequelize = require('../util/database');
 
 exports.addExpense=async(req,res,next)=>{
     try{
+        const trans=await sequelize.transaction();
         const amount=req.body.amount;
         const category=req.body.category;
         const description=req.body.description;
         const userId=req.user.id
-        const data=await Expense.create({amount:amount,category:category,description:description,userId:userId})
+        const data=await Expense.create({amount:amount,category:category,description:description,userId:userId},{transaction:trans})
         const totalAmount=Number(req.user.totalAmount)+Number(amount)
         console.log(totalAmount)
-        User.update({
-            totalAmount:totalAmount
+        await User.update({
+            totalAmount:totalAmount,
         },{
-            where:{id:req.user.id}
+            where:{id:req.user.id},
+            transaction:trans
+
         })
-        res.status(201).json({expenseDetails:data})
+         await trans.commit();
+         return res.status(201).json({expenseDetails:data})
     }
     catch(err){
-        res.status(400).json({err:err})
+        await trans.rollback();
+       return res.status(400).json({err:err})
     }
     
 }
@@ -34,8 +40,24 @@ exports.getExpense=async (req,res,next)=>{
 }
 
 exports.deleteExpense=async(req,res,next)=>{
-    const expenseId=req.params.productId;
-    const userid=req.user.id
-    await Expense.destroy({where:{id:expenseId,userId:userid}})
-    res.sendStatus(200)
+    try{
+        const trans=await sequelize.transaction();
+        const expenseId=req.params.productId;
+        const userid=req.user.id
+        const amount=req.params.amount;
+        await Expense.destroy({where:{id:expenseId,userId:userid}},{transaction:trans})
+        const totalAmount=Number(req.user.totalAmount)-Number(amount)
+        await User.update({
+            totalAmount:totalAmount
+        },{
+            where:{id:req.user.id},
+            transaction:trans
+        })
+        await trans.commit();
+        return res.sendStatus(200)
+    }
+    catch(err){
+        await trans.rollback();
+        return res.status(500).json({err:err})
+    }
 }
