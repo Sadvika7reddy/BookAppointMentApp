@@ -16,7 +16,7 @@ const forgotpassword=async(req,res)=>{
         sendMail.setApiKey(process.env.SENGRID_API_KEY)
         const msg={
             to:email,
-            from:'sadvika4amanganti@gmail.com',
+            from:'swathi8186970@gmail.com',
             subject:'Welcome to Company',
             text:'Nice to meet to uu',
             html: `<a href="http://localhost:3000/password/resetpassword/${id}">Reset password</a>`,

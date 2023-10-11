@@ -7,6 +7,8 @@ const expenseControllers=require('../controllers/add-expense')
 router.post('/expense/add-expenses',Authentication.authenticate,expenseControllers.addExpense)
 
 router.get('/expense/get-expenses',Authentication.authenticate,expenseControllers.getExpense)
+ 
+router.get('/expense/download',Authentication.authenticate,expenseControllers.downloadExpense)
 
 router.delete('/expense/delete-expenses/:productId/:amount',Authentication.authenticate,expenseControllers.deleteExpense)
 
