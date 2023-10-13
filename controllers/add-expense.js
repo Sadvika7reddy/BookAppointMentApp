@@ -4,6 +4,36 @@ const sequelize = require('../util/database');
 const AWS=require('aws-sdk') 
 const DownloadFiles=require('../models/downloadfile')
 
+exports.getPagination=async(req,res)=>{
+    const Items_Per_Page=5;
+    const page=+req.query.page||1;
+     const limit=+req.query.itemsPerPage||1
+   
+    console.log('page,limit',page,limit)
+      let totalItems;
+      Expense.count()
+      .then((total)=>{
+        totalItems=total
+        return Expense.findAll({
+            offset: (page - 1)*limit,
+            limit: limit
+        },{where:{userId:req.user.id}})
+      })
+      .then((files)=> {
+        
+        return res.json({
+            files:files,
+            currentPage: page,
+            hasNextPage: limit * page <totalItems,
+            nextPage: page+1,
+            hasPreviousPage: page > 1,
+            previousPage: page - 1,
+            lastPage: Math.ceil(totalItems/limit)
+        })
+    })
+    .catch(err=>console.log(err))
+}
+
 exports.downloadExpense = async (req,res)=> {
     try{
       const expenses = await Expense.findAll({where : {userId : req.user.id}})

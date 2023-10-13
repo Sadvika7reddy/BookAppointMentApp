@@ -10,6 +10,8 @@ router.get('/expense/get-expenses',Authentication.authenticate,expenseController
  
 router.get('/expense/download',Authentication.authenticate,expenseControllers.downloadExpense)
 
+router.get('/expense/pagination',Authentication.authenticate,expenseControllers.getPagination)
+
 router.delete('/expense/delete-expenses/:productId/:amount',Authentication.authenticate,expenseControllers.deleteExpense)
 
 module.exports=router;
