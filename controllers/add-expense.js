@@ -66,8 +66,9 @@ exports.downloadExpense = async (req,res)=> {
    {
        try{
            const BUCKET_NAME = 'bookapp098'
-           const IAM_USER_KEY = process.env.IAM_USER_KEY
-           const IAM_USER_SECRET = process.env.IAM_USER_SECRET
+          const IAM_USER_KEY = process.env.IAM_USER_KEY
+         const IAM_USER_SECRET = process.env.IAM_USER_SECRET
+       
    
            let s3Bucket = new AWS.S3({
                accessKeyId: IAM_USER_KEY,

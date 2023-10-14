@@ -4,8 +4,7 @@ const Order=require('../models/orders')
 const purchasepremium=async(req,res,next)=>{
    try{
         var rzp=new Razorpay({
-            key_id:process.env.RAZORPAY_KEY_ID,
-              
+            key_id:process.env.RAZORPAY_KEY_ID,      
             key_secret:process.env.RAZORPAY_KEY_SECRET
            
         })
