@@ -18,8 +18,12 @@ const passwordRoutes=require('./routes/password');
 const { SsoTokenRequest } = require('sib-api-v3-sdk');
 const helmet=require('helmet')
 const app=express();
-
+const dotenv=require('dotenv')
 const acessLogStream=fs.createWriteStream(path.join(__dirname,'access.log'),{flags:'a'})
+
+dotenv.config();
+
+
 
 app.use(helmet())
 app.use(morgan('combined',{stream:acessLogStream}))
